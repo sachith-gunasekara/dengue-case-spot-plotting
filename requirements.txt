@@ -1,0 +1,6 @@
+flask
+flask-ngrok
+gspread
+oauth2client
+plotly
+geopandas
