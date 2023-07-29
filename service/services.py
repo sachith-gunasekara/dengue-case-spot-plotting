@@ -2,6 +2,8 @@ from helper.helper import setup_auth
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px
+from flask import render_template_string
+import plotly.graph_objects as go
 
 
 def get_spreadsheet_data(gc, url):
@@ -29,10 +31,59 @@ def create_choropleth_map(gdf, center_lat, center_lon):
         geojson=gdf.geometry,
         locations=gdf.index,
         mapbox_style="carto-positron",
-        zoom=8,
+        zoom=9,
         center={
             "lat": center_lat,
             "lon": center_lon
         },
         opacity=0.5
     )
+
+
+def return_moh_area_plot():
+    gc = setup_auth()
+
+    # Open the Google Sheet and get the data
+    df = get_spreadsheet_data(gc,
+                              'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
+    df[['latitude', 'longitude']] = df['Location'].str.split(',', expand=True).astype(float)
+
+    gdf = load_geojson("res/Organisation_units.geojson")
+    center_lat, center_lon = get_center(gdf)
+
+    fig = create_choropleth_map(gdf, center_lat, center_lon)
+
+    colors = ['blue', 'green', 'red', 'yellow', 'purple', 'orange', 'pink']  # Can be any colors you want
+
+    for i, week_no in enumerate(df['Week No'].unique()):
+        df_week = df[df['Week No'] == week_no]
+        custom_data = list(zip(df_week['MOH Area'], df_week['PHI Area']))  # preparing extra data
+        fig.add_scattermapbox(
+            lat=df_week['latitude'],
+            lon=df_week['longitude'],
+            mode='markers',
+            name=f"Week {week_no}",  # This will represent the week number in the legend
+            customdata=custom_data,  # adding extra data
+            marker=go.scattermapbox.Marker(
+                size=10,  # Adjust this to desired marker size
+                color=colors[i % len(colors)],  # Assign a color to the marker
+            ),
+            hovertemplate=
+            f"<b>Week</b>: {week_no}<br>" +
+            "<b>Latitude</b>: %{lat}<br>" +
+            "<b>Longitude</b>: %{lon}<br>" +
+            "<b>MOH Area</b>: %{customdata[0]}<br>" +
+            "<b>PHI Area</b>: %{customdata[1]}",
+        )
+
+    # Render the plot to HTML
+    graphJSON = fig.to_html()
+
+    # render template string
+    return render_template_string("""
+        <html>
+            <body>
+                {{graphJSON | safe}}
+            </body>
+        </html>
+    """, graphJSON=graphJSON)
