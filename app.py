@@ -55,8 +55,6 @@ def home():
     # Add the scatter plot of the location data to the map
     fig.add_scattermapbox(lat=df['latitude'], lon=df['longitude'], mode='markers')
 
-    fig.show()
-
     # Render the plot to HTML
     graphJSON = fig.to_html()
 
