@@ -28,8 +28,14 @@ body {
 
 #moh-dropdown, #phi-dropdown {
     display: inline-block;
-    width: 30%;
+    width: 100%;
     margin: 20px;
+}
+
+@media(min-width: 768px) { /* For medium devices and above */
+    #moh-dropdown, #phi-dropdown {
+        width: 30%;
+    }
 }
 
 .Select-menu-outer {

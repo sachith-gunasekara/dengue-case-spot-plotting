@@ -14,6 +14,8 @@ from helper import \
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+app.title = 'Matale Dengue Case Spotting'
+
 app.layout = dbc.Container([ # fluid Bootstrap Container
     dbc.Row([ # Row for the header
         dbc.Col(
