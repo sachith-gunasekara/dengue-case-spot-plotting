@@ -53,11 +53,22 @@ def return_moh_area_plot():
 
     fig = create_choropleth_map(gdf, center_lat, center_lon)
 
-    colors = ['blue', 'green', 'red', 'yellow', 'purple', 'orange', 'pink']  # Can be any colors you want
+    colors = [
+        '#800080',  # Dark Purple
+        '#0000A0',  # Dark Blue
+        '#000000',  # Black
+        '#FFA500',  # Orange
+        '#FFFF00',  # Yellow
+        '#FF0000',  # Red
+        '#A52A2A',  # Brown
+        '#008000',  # Green
+        '#800000',  # Maroon
+        '#808000'  # Olive
+    ]
 
     for i, week_no in enumerate(df['Week No'].unique()):
         df_week = df[df['Week No'] == week_no]
-        custom_data = list(zip(df_week['MOH Area'], df_week['PHI Area']))  # preparing extra data
+        custom_data = list(zip(df_week['Patient Name'], df_week['MOH Area'], df_week['PHI Area']))
         fig.add_scattermapbox(
             lat=df_week['latitude'],
             lon=df_week['longitude'],
@@ -69,11 +80,9 @@ def return_moh_area_plot():
                 color=colors[i % len(colors)],  # Assign a color to the marker
             ),
             hovertemplate=
-            f"<b>Week</b>: {week_no}<br>" +
-            "<b>Latitude</b>: %{lat}<br>" +
-            "<b>Longitude</b>: %{lon}<br>" +
-            "<b>MOH Area</b>: %{customdata[0]}<br>" +
-            "<b>PHI Area</b>: %{customdata[1]}",
+            "%{customdata[0]}<br>" +
+            "<b>MOH Area</b>: %{customdata[1]}<br>" +
+            "<b>PHI Area</b>: %{customdata[2]}",
         )
 
     # Render the plot to HTML
