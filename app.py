@@ -16,15 +16,15 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.title = 'Matale Dengue Case Spotting'
 
-app.layout = dbc.Container([ # fluid Bootstrap Container
-    dbc.Row([ # Row for the header
+app.layout = dbc.Container([  # fluid Bootstrap Container
+    dbc.Row([  # Row for the header
         dbc.Col(
             html.H1('Matale Dengue Case Spotting', style={'textAlign': 'center'}),
             width=12
         )
     ]),
-    dbc.Row([ # Row for the dropdowns
-        dbc.Col( # Column for the first dropdown
+    dbc.Row([  # Row for the dropdowns
+        dbc.Col(  # Column for the first dropdown
             dcc.Dropdown(
                 id='moh-dropdown',
                 placeholder="Select a MOH Area",
@@ -33,7 +33,7 @@ app.layout = dbc.Container([ # fluid Bootstrap Container
             width={'size': 6, 'offset': 0, 'order': 1},
             xs={'size': 12, 'offset': 0, 'order': 'first'}
         ),
-        dbc.Col( # Column for the second dropdown
+        dbc.Col(  # Column for the second dropdown
             dcc.Dropdown(
                 id='phi-dropdown',
                 placeholder="Select a PHI Area",
@@ -43,7 +43,7 @@ app.layout = dbc.Container([ # fluid Bootstrap Container
             xs={'size': 12, 'offset': 0, 'order': 'last'}
         ),
     ]),
-    dbc.Row([ # Row for the map
+    dbc.Row([  # Row for the map
         dbc.Col(
             dcc.Graph(
                 id='map-graph'
@@ -53,15 +53,16 @@ app.layout = dbc.Container([ # fluid Bootstrap Container
     ]),
 ], fluid=True)
 
+gc = setup_auth()
+df = get_spreadsheet_data(gc,
+                          'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
+
 
 @app.callback(
     Output('moh-dropdown', 'options'),
     Input('map-graph', 'figure')
 )
 def set_moh_options(figure):
-    gc = setup_auth()
-    df = get_spreadsheet_data(gc,
-                              'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
     moh_areas = df['MOH Area'].unique()
     return [{'label': i, 'value': i} for i in moh_areas]
 
@@ -73,9 +74,6 @@ def set_moh_options(figure):
 def set_phi_options(selected_moh):
     if selected_moh is None:
         return []
-    gc = setup_auth()
-    df = get_spreadsheet_data(gc,
-                              'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
     phi_areas = df[df['MOH Area'].isin(selected_moh)]['PHI Area'].unique()
     return [{'label': i, 'value': i} for i in phi_areas]
 
@@ -86,8 +84,6 @@ def set_phi_options(selected_moh):
     Input('phi-dropdown', 'value')
 )
 def update_map(selected_moh, selected_phi):
-    gc = setup_auth()
-    df = get_spreadsheet_data(gc, 'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
     df[['latitude', 'longitude']] = df['Location'].str.split(',', expand=True).astype(float)
 
     gdf = load_geojson("res/Organisation_units.geojson")
