@@ -14,12 +14,12 @@ from helper import \
 
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
-app.title = 'Matale Dengue Case Spotting'
+app.title = 'Matale Dengue Case Spot Plotting'
 
 app.layout = dbc.Container([  # fluid Bootstrap Container
     dbc.Row([  # Row for the header
         dbc.Col(
-            html.H1('Matale Dengue Case Spotting', style={'textAlign': 'center'}),
+            html.H1('Matale Dengue Case Spot Plotting', style={'textAlign': 'center'}),
             width=12
         )
     ]),
@@ -27,20 +27,32 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
         dbc.Col(  # Column for the first dropdown
             dcc.Dropdown(
                 id='moh-dropdown',
-                placeholder="Select a MOH Area",
-                multi=True
+                placeholder="Select an MOH Area(s)",
+                multi=True,
+                style={'width': '100%'}
             ),
-            width={'size': 6, 'offset': 0, 'order': 1},
-            xs={'size': 12, 'offset': 0, 'order': 'first'}
+            xs={'size': 12, 'offset': 0, 'order': 'first'},
+            md={'size': 3}
+        ),
+        dbc.Tooltip(
+            "This dropdown allows you to add/remove/search multiple MOH areas.",
+            target="moh-dropdown",
+            placement="right"
         ),
         dbc.Col(  # Column for the second dropdown
             dcc.Dropdown(
                 id='phi-dropdown',
-                placeholder="Select a PHI Area",
-                multi=True
+                placeholder="Select a PHI Area(s)",
+                multi=True,
+                style={'width': '100%'}
             ),
-            width={'size': 6, 'offset': 0, 'order': 2},
-            xs={'size': 12, 'offset': 0, 'order': 'last'}
+            xs={'size': 12, 'offset': 0, 'order': 'last'},
+            md={'size': 3}
+        ),
+        dbc.Tooltip(
+            "This dropdown allows you to add/remove/search multiple PHI areas.",
+            target="phi-dropdown",
+            placement="right"
         ),
     ]),
     dbc.Row([  # Row for the map

@@ -40,7 +40,7 @@ def create_choropleth_map(gdf, center_lat, center_lon):
         geojson=gdf.geometry,
         locations=gdf.index,
         mapbox_style="carto-positron",
-        zoom=9,
+        zoom=8.8,
         center={
             "lat": center_lat,
             "lon": center_lon
