@@ -23,6 +23,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
             width=12
         )
     ]),
+    html.Br(),
     dbc.Row([  # Row for the dropdowns
         dbc.Col(  # Column for the first dropdown
             dcc.Dropdown(
@@ -37,7 +38,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
         dbc.Tooltip(
             "This dropdown allows you to add/remove/search multiple MOH areas.",
             target="moh-dropdown",
-            placement="right"
+            placement="bottom"
         ),
         dbc.Col(  # Column for the second dropdown
             dcc.Dropdown(
@@ -52,7 +53,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
         dbc.Tooltip(
             "This dropdown allows you to add/remove/search multiple PHI areas.",
             target="phi-dropdown",
-            placement="right"
+            placement="bottom"
         ),
     ]),
     dbc.Row([  # Row for the map
@@ -128,6 +129,13 @@ def update_map(selected_moh, selected_phi):
             showocean=True,
             oceancolor="rgb(30, 30, 30)",
             showlakes=True
+        ),
+        legend=dict(
+            yanchor="top",
+            y=0.99,
+            xanchor="left",
+            x=0.002,
+            bgcolor="#282828",
         ),
         template="plotly_dark",
         paper_bgcolor='rgba(0,0,0,0)',

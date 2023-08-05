@@ -35,7 +35,7 @@ def get_center(gdf):
 
 
 def create_choropleth_map(gdf, center_lat, center_lon):
-    return px.choropleth_mapbox(
+    fig = px.choropleth_mapbox(
         gdf,
         geojson=gdf.geometry,
         locations=gdf.index,
@@ -47,6 +47,10 @@ def create_choropleth_map(gdf, center_lat, center_lon):
         },
         opacity=0.5
     )
+
+    fig.update_traces(showlegend=False)
+
+    return fig
 
 
 def create_scatter_map(df, fig):
