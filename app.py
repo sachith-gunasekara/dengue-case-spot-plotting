@@ -38,7 +38,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
         dbc.Tooltip(
             "This dropdown allows you to add/remove/search multiple MOH areas.",
             target="moh-dropdown",
-            placement="bottom"
+            placement="top"
         ),
         dbc.Col(  # Column for the second dropdown
             dcc.Dropdown(
@@ -53,7 +53,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
         dbc.Tooltip(
             "This dropdown allows you to add/remove/search multiple PHI areas.",
             target="phi-dropdown",
-            placement="bottom"
+            placement="top"
         ),
     ]),
     dbc.Row([  # Row for the map
