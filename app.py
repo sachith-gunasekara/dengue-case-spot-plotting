@@ -68,7 +68,7 @@ app.layout = dbc.Container([  # fluid Bootstrap Container
 
 gc = setup_auth()
 df = get_spreadsheet_data(gc,
-                          'https://docs.google.com/spreadsheets/d/1kFyChQu7LjRG2ZXtptGVyj6uHUSNi9BnoEBaVFrB6oo/edit#gid=0')
+                          'https://docs.google.com/spreadsheets/d/1hCqcCI1tMpwc_Dz3o2242x78Iq4E_r6qeeltfyPmeQc/edit#gid=1693411564')
 
 
 @app.callback(
